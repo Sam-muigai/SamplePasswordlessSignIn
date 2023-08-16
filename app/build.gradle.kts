@@ -74,4 +74,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.android.gms:play-services-auth:20.6.0")
     implementation ("com.google.firebase:firebase-dynamic-links-ktx")
+
+    //Coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil-svg:2.2.2")
 }
