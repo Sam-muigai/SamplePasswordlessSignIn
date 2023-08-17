@@ -58,7 +58,7 @@ fun Posts(
 ) {
     val context = LocalContext.current
     Surface(modifier = modifier.fillMaxWidth()) {
-        posts.apply {
+        posts.run {
             Column(modifier = Modifier) {
                 if (liked || retweeted) {
                     val (icon, message) = if (liked)
@@ -139,6 +139,7 @@ fun Posts(
                                 fontSize = 14.sp,
                                 lineHeight = 20.5.sp,
                                 fontFamily = sf_pro_light,
+                                fontWeight = FontWeight.Bold,
                             )
                         )
                         Spacer(modifier = Modifier.height(10.dp))

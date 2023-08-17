@@ -22,7 +22,7 @@ val samplePost2 = Posts(
     userName = "Maximmilian",
     userLabel = "@maxjacobson",
     timePosted = "3h",
-    postInfo = "Y’all ready for this next post?",
+    postInfo = "Can your setup Even? 😁",
     noOfComments = 32,
     noOfLikes = 18,
     noOfReposts = 46,
@@ -50,5 +50,10 @@ val samplePost3 = Posts(
 
 val posts = listOf<Posts>(
     samplePost1,
-    samplePost2
+    samplePost2,
+    samplePost3
 )
+
+/*
+* WwHEN WE BEHIND THE TWO Behind
+* */
