@@ -31,6 +31,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.samkt.sample.components.Posts
 import com.samkt.sample.components.TopBar
 import com.samkt.sample.components.bottomNavItems
@@ -39,10 +40,11 @@ import com.samkt.sample.data.model.samplePost1
 import com.samkt.sample.data.model.samplePost2
 import com.samkt.sample.data.model.samplePost3
 import com.samkt.sample.ui.theme.SampleTheme
+import com.samkt.sample.util.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(modifier: Modifier = Modifier,navController: NavController) {
     Scaffold(
         modifier = modifier,
         floatingActionButton = {
@@ -50,6 +52,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 modifier = Modifier.size(56.dp),
                 onClick = {
                     // TODO: Add a new post
+                          navController.navigate(Routes.POST_SCREEN)
                 },
             ) {
                 Image(
@@ -111,6 +114,6 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 @Composable
 fun HomeScreenPreview() {
     SampleTheme {
-        HomeScreen()
+//        HomeScreen()
     }
 }

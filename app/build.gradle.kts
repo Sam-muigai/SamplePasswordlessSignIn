@@ -1,3 +1,5 @@
+
+val navVersion = "2.7.0"
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -6,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.samkt.sample"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.samkt.sample"
@@ -67,7 +69,6 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-//    implementation("androidx.navigation:navigation-compose")
 
     //firebase
     implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
@@ -79,4 +80,9 @@ dependencies {
     //Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("io.coil-kt:coil-svg:2.2.2")
+
+    implementation("androidx.navigation:navigation-compose:2.7.0")
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.33.0-alpha")
+//    implementation("androidx.compose.ui:ui:1.6.0-alpha03")
+
 }

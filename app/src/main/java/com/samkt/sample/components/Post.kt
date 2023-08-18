@@ -148,19 +148,13 @@ fun Posts(
                                 modifier = Modifier
                                     .height(175.dp)
                                     .fillMaxWidth()
-                                    .clip(RoundedCornerShape(12.dp))
-                                    .border(
-                                        width = 0.33.dp,
-                                        color = Color(0xFFCED5DC),
-                                        shape = RoundedCornerShape(size = 12.dp)
-                                    ),
+                                    .clip(RoundedCornerShape(12.dp)),
                                 model = ImageRequest.Builder(context)
                                     .data(it)
                                     .crossfade(true)
                                     .build(),
                                 contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                                placeholder = painterResource(id = R.drawable.post)
+                                contentScale = ContentScale.Crop
                             )
                         }
                         Spacer(modifier = Modifier.height(8.dp))
