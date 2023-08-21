@@ -1,24 +1,27 @@
-package com.samkt.sample
+package com.samkt.sample.screens.post_screen
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,19 +41,24 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.samkt.sample.R
 import com.samkt.sample.ui.theme.sf_pro_light
-import com.samkt.sample.ui.theme.sf_pro_regular
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostScreen(
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavController,
+    viewModel: PostViewModel = viewModel()
+
 ) {
     val context = LocalContext.current
-    var text by remember {
-        mutableStateOf("")
-    }
+    val photoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = viewModel::chooseImage
+    )
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -71,9 +79,9 @@ fun PostScreen(
                         contentDescription = null
                     )
                 }
-
                 Button(
                     onClick = {
+                              viewModel.createPost()
                         // TODO: Add a post
                     },
                     colors = ButtonDefaults.buttonColors(
@@ -86,6 +94,7 @@ fun PostScreen(
         }
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
+            Text(text = viewModel.successful.value)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -104,33 +113,67 @@ fun PostScreen(
                     placeholder = painterResource(id = R.drawable.profile)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                BasicTextField(
-                    value = text,
-                    onValueChange = {
-                        text = it
-                    },
-                    textStyle = TextStyle(
-                        fontSize = 16.sp,
-                        fontFamily = sf_pro_light,
-                        fontWeight = FontWeight(400)
-                    ),
-                    decorationBox = { innerTextField ->
-                        if (text.isEmpty()) {
-                            Text(
-                                text = "Whats happening?",
-                                style = TextStyle(
-                                    fontSize = 16.sp,
-                                    fontFamily = sf_pro_light,
-                                    fontWeight = FontWeight(400),
-                                    color = Color(0xFF687684),
-                                )
+                IconButton(onClick = {
+                    // TODO: Choose the image
+                    photoPickerLauncher.launch(
+                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                    )
+                }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.image),
+                        contentDescription = null
+                    )
+                }
+                viewModel.imageUrl?.let {
+                    AsyncImage(
+                        modifier = Modifier
+                            .height(40.dp)
+                            .width(60.dp)
+                            .clip(RoundedCornerShape(8.dp)),
+                        model = it,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            }
+            BasicTextField(
+                modifier = Modifier.padding(start = 58.dp),
+                value = viewModel.postInformation,
+                onValueChange = viewModel::onPostInfo,
+                textStyle = TextStyle(
+                    fontSize = 16.sp,
+                    fontFamily = sf_pro_light,
+                    fontWeight = FontWeight(400)
+                ),
+                decorationBox = { innerTextField ->
+                    if (viewModel.postInformation.isEmpty()) {
+                        Text(
+                            text = "Whats happening?",
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontFamily = sf_pro_light,
+                                fontWeight = FontWeight(400),
+                                color = Color(0xFF687684),
                             )
-                        }
-                        innerTextField()
+                        )
                     }
+                    innerTextField()
+                }
+            )
+            viewModel.fbUrl?.let {
+                AsyncImage(
+                    modifier = Modifier
+                        .height(40.dp)
+                        .width(60.dp)
+                        .clip(RoundedCornerShape(8.dp)),
+                    model = it,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop
                 )
             }
+
         }
+
     }
 }
 

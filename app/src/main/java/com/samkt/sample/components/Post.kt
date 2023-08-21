@@ -1,9 +1,7 @@
 package com.samkt.sample.components
 
-import android.media.Image
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,7 +15,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -37,16 +33,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.ImageLoader
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
-import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import com.samkt.sample.R
 import com.samkt.sample.data.model.Posts
-import com.samkt.sample.data.model.posts
 import com.samkt.sample.data.model.samplePost1
-import com.samkt.sample.data.model.samplePost2
 import com.samkt.sample.ui.theme.SampleTheme
 import com.samkt.sample.ui.theme.sf_pro_light
 import com.samkt.sample.ui.theme.sf_pro_regular
@@ -64,12 +55,12 @@ fun Posts(
                     val (icon, message) = if (liked)
                         Pair(
                             R.drawable.heart_solid,
-                            " $sharedName liked"
+                            " $shared_name liked"
                         )
                     else
                         Pair(
                             R.drawable.retweet,
-                            " $sharedName retweeted"
+                            " $shared_name retweeted"
                         )
                     Row(
                         modifier = Modifier
@@ -103,7 +94,7 @@ fun Posts(
                             .size(55.dp)
                             .clip(CircleShape),
                         model = ImageRequest.Builder(context)
-                            .data(profilePic ?: "")
+                            .data(profile_pic ?: "")
                             .build(),
                         contentDescription = null,
                         placeholder = painterResource(id = R.drawable.profile),
@@ -119,7 +110,7 @@ fun Posts(
                                         fontSize = 16.sp
                                     )
                                 ) {
-                                    append("$userName ")
+                                    append("$user_name ")
                                 }
                                 withStyle(
                                     style = SpanStyle(
@@ -129,12 +120,12 @@ fun Posts(
                                         color = Color(0xFF687684)
                                     )
                                 ) {
-                                    append("$userLabel.$timePosted")
+                                    append("$user_label.$time_posted")
                                 }
                             }
                         )
                         Text(
-                            text = posts.postInfo,
+                            text = posts.post_info,
                             style = TextStyle(
                                 fontSize = 14.sp,
                                 lineHeight = 20.5.sp,
@@ -143,7 +134,7 @@ fun Posts(
                             )
                         )
                         Spacer(modifier = Modifier.height(10.dp))
-                        postImage?.let {
+                        post_image?.let {
                             AsyncImage(
                                 modifier = Modifier
                                     .height(175.dp)
@@ -159,14 +150,14 @@ fun Posts(
                         }
                         Spacer(modifier = Modifier.height(8.dp))
                         IconSection(
-                            likes = noOfLikes,
-                            retweets = noOfReposts,
-                            comments = noOfComments
+                            likes = no_of_likes,
+                            retweets = no_of_reposts,
+                            comments = no_of_comments
                         )
                     }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
-                if (isThread) {
+                if (is_thread) {
                     Row(
                         modifier = Modifier.padding(start = 29.dp),
                         verticalAlignment = Alignment.CenterVertically,
@@ -177,7 +168,7 @@ fun Posts(
                                 .size(37.dp)
                                 .clip(CircleShape),
                             model = ImageRequest.Builder(context)
-                                .data(profilePic ?: "")
+                                .data(profile_pic ?: "")
                                 .build(),
                             contentDescription = null,
                             placeholder = painterResource(id = R.drawable.profile),

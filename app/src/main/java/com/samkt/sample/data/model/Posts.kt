@@ -1,17 +1,50 @@
 package com.samkt.sample.data.model
 
+
 data class Posts(
-    val profilePic:String? = null,
-    val userName:String,
-    val userLabel:String,
-    val timePosted:String,
-    val postInfo:String,
-    val isThread:Boolean = false,
-    val noOfComments:Int,
-    val noOfLikes:Int,
-    val noOfReposts:Int,
-    val postImage:String? = null,
-    val retweeted:Boolean = false,
-    val liked:Boolean = false,
-    val sharedName:String = ""
-)
+    val profile_pic: String? = null,
+    val user_name: String,
+    val user_label: String,
+    val time_posted: String,
+    val post_info: String,
+    val is_thread: Boolean = false,
+    val no_of_comments: Int,
+    val no_of_likes: Int,
+    val no_of_reposts: Int,
+    val post_image: String? = null,
+    val retweeted: Boolean = false,
+    val liked: Boolean = false,
+    val shared_name: String = ""
+) {
+    constructor() : this(
+        "", "", "", "", "",
+        false, 0, 0, 0, "",
+        false, false
+    )
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

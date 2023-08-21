@@ -76,6 +76,10 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.android.gms:play-services-auth:20.6.0")
     implementation ("com.google.firebase:firebase-dynamic-links-ktx")
+    //Firestore
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    //Firebase Storage
+    implementation("com.google.firebase:firebase-storage-ktx")
 
     //Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
@@ -83,6 +87,5 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:2.7.0")
     implementation("com.google.accompanist:accompanist-navigation-animation:0.33.0-alpha")
-//    implementation("androidx.compose.ui:ui:1.6.0-alpha03")
 
 }
