@@ -10,51 +10,80 @@ import androidx.lifecycle.viewModelScope
 import com.samkt.sample.data.FireStoreRepository
 import com.samkt.sample.data.FirebaseStorageRepository
 import com.samkt.sample.data.model.Posts
+import com.samkt.sample.util.UiEvents
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 const val STORAGE = "firebase_storage"
 
 class PostViewModel : ViewModel() {
-    val fbStorage = FirebaseStorageRepository()
-    val fbFireStore = FireStoreRepository()
+    private val fbStorage = FirebaseStorageRepository()
+    private val fbFireStore = FireStoreRepository()
 
+    private var _uiState = MutableStateFlow(PostScreenState())
+    val uiState = _uiState.asStateFlow()
 
-    var imageUrl: String? by mutableStateOf(null)
-    var fbUrl: String? by mutableStateOf(null)
+    private var _uiEvents = MutableSharedFlow<UiEvents>()
+    val uiEvents = _uiEvents.asSharedFlow()
 
-    var postInformation by mutableStateOf("")
-
-    var successful = mutableStateOf("")
 
     fun chooseImage(imageUri: Uri?) {
-        imageUrl = imageUri!!.toString()
+        _uiState.update {
+            it.copy(
+                imageUrl = imageUri!!.toString()
+            )
+        }
     }
 
     fun onPostInfo(text:String){
-        postInformation = text
+        _uiState.update {
+            it.copy(
+                postInformation = text
+            )
+        }
     }
     fun createPost() {
         var firebaseUrl: Deferred<Uri?>? = null
         viewModelScope.launch {
-            imageUrl?.let { uri ->
+            _uiState.update {
+                it.copy(
+                    loading = true
+                )
+            }
+            uiState.value.imageUrl?.let { uri ->
                 firebaseUrl = async { fbStorage.uploadImage(uri.toUri()) }
             }
+            //Random number for likes,comment and repost
+            val range = 1 until 34
+            val image = if (firebaseUrl?.await() != null) firebaseUrl?.await().toString() else null
             val post = Posts(
                 profile_pic = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfXpi1Nrns6Lg_qmU2V4jJ4kexQbqsgKyCxg&usqp=CAU",
                 user_name = "Maximmilian",
                 user_label = "@maxjacobson",
                 time_posted = "3h",
-                post_info = postInformation,
-                no_of_comments = 32,
-                no_of_likes = 18,
-                no_of_reposts = 46,
-                post_image = firebaseUrl?.await().toString(),
+                post_info = uiState.value.postInformation,
+                no_of_comments = range.random(),
+                no_of_likes = range.random(),
+                no_of_reposts = range.random(),
+                post_image = image,
                 retweeted = true,
                 shared_name = "Mwania"
             )
-            fbFireStore.addPost(post)
+            val result = fbFireStore.addPost(post)
+            if (result != null){
+                _uiState.update {
+                    it.copy(
+                        loading = false
+                    )
+                }
+                _uiEvents.emit(UiEvents.PopBackStack)
+            }
         }
     }
 }

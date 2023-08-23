@@ -23,6 +23,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,6 +46,7 @@ import coil.request.ImageRequest
 import com.samkt.sample.R
 import com.samkt.sample.ui.theme.sf_pro_light
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.samkt.sample.util.UiEvents
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,7 +61,19 @@ fun PostScreen(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = viewModel::chooseImage
     )
-
+    val state = viewModel.uiState.collectAsState().value
+    LaunchedEffect(
+        key1 = true,
+        block = {
+            viewModel.uiEvents.collect{
+                when(it){
+                    is UiEvents.PopBackStack ->{
+                        navController.popBackStack()
+                    }
+                }
+            }
+        }
+    )
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -81,8 +96,7 @@ fun PostScreen(
                 }
                 Button(
                     onClick = {
-                              viewModel.createPost()
-                        // TODO: Add a post
+                        viewModel.createPost()
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF4C9EEB)
@@ -94,7 +108,6 @@ fun PostScreen(
         }
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
-            Text(text = viewModel.successful.value)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -124,7 +137,7 @@ fun PostScreen(
                         contentDescription = null
                     )
                 }
-                viewModel.imageUrl?.let {
+                state.imageUrl?.let {
                     AsyncImage(
                         modifier = Modifier
                             .height(40.dp)
@@ -138,7 +151,7 @@ fun PostScreen(
             }
             BasicTextField(
                 modifier = Modifier.padding(start = 58.dp),
-                value = viewModel.postInformation,
+                value = state.postInformation,
                 onValueChange = viewModel::onPostInfo,
                 textStyle = TextStyle(
                     fontSize = 16.sp,
@@ -146,7 +159,7 @@ fun PostScreen(
                     fontWeight = FontWeight(400)
                 ),
                 decorationBox = { innerTextField ->
-                    if (viewModel.postInformation.isEmpty()) {
+                    if (state.postInformation.isEmpty()) {
                         Text(
                             text = "Whats happening?",
                             style = TextStyle(
@@ -160,20 +173,7 @@ fun PostScreen(
                     innerTextField()
                 }
             )
-            viewModel.fbUrl?.let {
-                AsyncImage(
-                    modifier = Modifier
-                        .height(40.dp)
-                        .width(60.dp)
-                        .clip(RoundedCornerShape(8.dp)),
-                    model = it,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop
-                )
-            }
-
         }
-
     }
 }
 
