@@ -29,6 +29,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -101,29 +102,32 @@ fun Posts(
                         contentScale = ContentScale.Crop
                     )
                     Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = buildAnnotatedString {
-                                withStyle(
-                                    style = SpanStyle(
-                                        fontFamily = sf_pro_regular,
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 16.sp
-                                    )
-                                ) {
-                                    append("$user_name ")
-                                }
-                                withStyle(
-                                    style = SpanStyle(
-                                        fontFamily = sf_pro_regular,
-                                        fontWeight = FontWeight.Light,
-                                        fontSize = 14.sp,
-                                        color = Color(0xFF687684)
-                                    )
-                                ) {
-                                    append("$user_label.$time_posted")
-                                }
-                            }
-                        )
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            Text(
+                                text = buildAnnotatedString {
+                                    withStyle(
+                                        style = SpanStyle(
+                                            fontFamily = sf_pro_regular,
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 16.sp
+                                        )
+                                    ) {
+                                        append("$user_name ")
+                                    }
+                                    withStyle(
+                                        style = SpanStyle(
+                                            fontFamily = sf_pro_regular,
+                                            fontWeight = FontWeight.Light,
+                                            fontSize = 14.sp,
+                                            color = Color(0xFF687684)
+                                        )
+                                    ) {
+                                        append("$user_label.$time_posted")
+                                    }
+                                },
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
                         Text(
                             text = posts.post_info,
                             style = TextStyle(

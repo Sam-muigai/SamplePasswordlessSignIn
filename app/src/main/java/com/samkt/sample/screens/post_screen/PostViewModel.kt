@@ -32,11 +32,10 @@ class PostViewModel : ViewModel() {
     private var _uiEvents = MutableSharedFlow<UiEvents>()
     val uiEvents = _uiEvents.asSharedFlow()
 
-
     fun chooseImage(imageUri: Uri?) {
         _uiState.update {
             it.copy(
-                imageUrl = imageUri!!.toString()
+                imageUrl = imageUri?.toString()
             )
         }
     }
@@ -50,40 +49,71 @@ class PostViewModel : ViewModel() {
     }
     fun createPost() {
         var firebaseUrl: Deferred<Uri?>? = null
-        viewModelScope.launch {
-            _uiState.update {
-                it.copy(
-                    loading = true
-                )
-            }
-            uiState.value.imageUrl?.let { uri ->
-                firebaseUrl = async { fbStorage.uploadImage(uri.toUri()) }
-            }
-            //Random number for likes,comment and repost
-            val range = 1 until 34
-            val image = if (firebaseUrl?.await() != null) firebaseUrl?.await().toString() else null
-            val post = Posts(
-                profile_pic = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfXpi1Nrns6Lg_qmU2V4jJ4kexQbqsgKyCxg&usqp=CAU",
-                user_name = "Maximmilian",
-                user_label = "@maxjacobson",
-                time_posted = "3h",
-                post_info = uiState.value.postInformation,
-                no_of_comments = range.random(),
-                no_of_likes = range.random(),
-                no_of_reposts = range.random(),
-                post_image = image,
-                retweeted = true,
-                shared_name = "Mwania"
-            )
-            val result = fbFireStore.addPost(post)
-            if (result != null){
+        if (uiState.value.postInformation.isNotEmpty()){
+            viewModelScope.launch {
                 _uiState.update {
                     it.copy(
-                        loading = false
+                        loading = true
                     )
                 }
-                _uiEvents.emit(UiEvents.PopBackStack)
+                uiState.value.imageUrl?.let { uri ->
+                    firebaseUrl = async { fbStorage.uploadImage(uri.toUri()) }
+                }
+                //Random number for likes,comment and repost
+                val range = 1 until 34
+                val image = if (firebaseUrl?.await() != null) firebaseUrl?.await().toString() else null
+                val retweetedOrLiked = listOf(true,false,false,false)
+                val names = listOf("Mwania","Elon Musk","Zuck")
+                val profileInfo = sampleUsers.random()
+                val post = Posts(
+                    profile_pic = profileInfo.profileImage,
+                    user_name = profileInfo.userName,
+                    user_label = profileInfo.userLabel,
+                    time_posted = "3h",
+                    post_info = uiState.value.postInformation,
+                    no_of_comments = range.random(),
+                    no_of_likes = range.random(),
+                    no_of_reposts = range.random(),
+                    post_image = image,
+                    retweeted = retweetedOrLiked.random(),
+                    shared_name = names.random(),
+                    liked = retweetedOrLiked.random()
+                )
+                val result = fbFireStore.addPost(post)
+                if (result != null){
+                    _uiState.update {
+                        it.copy(
+                            loading = false
+                        )
+                    }
+                    _uiEvents.emit(UiEvents.ShowSnackBar("Tweet successfully posted"))
+                    _uiEvents.emit(UiEvents.PopBackStack)
+                }
             }
         }
     }
 }
+
+val sampleUsers = listOf(
+    ProfileInfo(
+        profileImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfXpi1Nrns6Lg_qmU2V4jJ4kexQbqsgKyCxg&usqp=CAU",
+        userName = "Maximmilian",
+        userLabel = "@maxjacobson"
+    ),
+    ProfileInfo(
+        profileImage = "https://wallpapers.com/images/hd/cool-profile-picture-1ecoo30f26bkr14o.jpg",
+        userName = "Samuel G",
+        userLabel = "@SamMuigai"
+    ),
+    ProfileInfo(
+        profileImage = "https://i.pinimg.com/originals/25/78/61/25786134576ce0344893b33a051160b1.jpg",
+        userName = "Maina Karoki",
+        userLabel = "@mainaKaroki"
+    ),
+)
+
+data class ProfileInfo(
+    val profileImage:String,
+    val userName:String,
+    val userLabel:String
+)
