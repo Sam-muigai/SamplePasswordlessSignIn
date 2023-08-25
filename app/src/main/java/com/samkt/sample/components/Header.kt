@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -26,19 +25,19 @@ import com.samkt.sample.ui.theme.SampleTheme
 
 @Composable
 fun TopBar(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     Surface(
         modifier = modifier.fillMaxWidth(),
-        color = MaterialTheme.colorScheme.background
+        color = MaterialTheme.colorScheme.background,
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp, vertical = 10.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             AsyncImage(
                 modifier = Modifier
@@ -49,17 +48,17 @@ fun TopBar(
                     .build(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                placeholder = painterResource(id = R.drawable.profile)
+                placeholder = painterResource(id = R.drawable.profile),
             )
             Image(
                 modifier = Modifier.size(25.dp),
                 painter = painterResource(id = R.drawable.twitter),
-                contentDescription = null
+                contentDescription = null,
             )
             Image(
                 modifier = Modifier.size(22.dp),
                 painter = painterResource(id = R.drawable.star),
-                contentDescription = null
+                contentDescription = null,
             )
         }
     }

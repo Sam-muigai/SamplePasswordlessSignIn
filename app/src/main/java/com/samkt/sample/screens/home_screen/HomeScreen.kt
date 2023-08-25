@@ -1,7 +1,9 @@
 package com.samkt.sample.screens.home_screen
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -17,7 +20,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -37,10 +42,15 @@ import com.samkt.sample.util.Routes
 fun HomeScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    viewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
 ) {
-
-    val posts = viewModel.posts?.collectAsState()?.value ?: emptyList()
+    val states = viewModel.homeScreenState.collectAsState().value
+    LaunchedEffect(
+        key1 = true,
+        block = {
+            viewModel.getPosts()
+        },
+    )
     Scaffold(
         modifier = modifier,
         floatingActionButton = {
@@ -54,37 +64,47 @@ fun HomeScreen(
                 Image(
                     modifier = Modifier.fillMaxSize(),
                     painter = painterResource(id = R.drawable.tweet),
-                    contentDescription = null
+                    contentDescription = null,
                 )
             }
         },
         bottomBar = {
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Divider(thickness = 1.dp)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 41.dp, vertical = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     bottomNavItems.forEach { item ->
                         Icon(
                             modifier = Modifier.size(21.dp),
                             painter = painterResource(id = item.icon),
                             contentDescription = item.route,
-                            tint = if (item.isSelected) Color(0xFF4C9EEB) else Color(0xFF687684)
+                            tint = if (item.isSelected) Color(0xFF4C9EEB) else Color(0xFF687684),
                         )
                     }
                 }
             }
-        }
+        },
     ) { paddingValues ->
         Surface(modifier = Modifier.fillMaxSize()) {
+            AnimatedVisibility(visible = states.loading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
             Column(
                 modifier = Modifier
-                    .padding(paddingValues)
+                    .padding(paddingValues),
             ) {
                 LazyColumn(
                     content = {
@@ -92,21 +112,18 @@ fun HomeScreen(
                             TopBar()
                             Divider(thickness = 0.5.dp)
                         }
-                        items(posts) { post ->
-                            if (post != null) {
-                                Posts(
-                                    modifier = Modifier,
-                                    posts = post
-                                )
-                            }
+                        items(states.posts) { post ->
+                            Posts(
+                                modifier = Modifier,
+                                posts = post,
+                            )
                         }
-                    }
+                    },
                 )
             }
         }
     }
 }
-
 
 @Preview()
 @Composable

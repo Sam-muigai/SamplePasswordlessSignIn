@@ -1,5 +1,8 @@
 package com.samkt.sample.data.model
 
+/*
+* Refactor to deserialize firestore data later
+* */
 
 data class Posts(
     val profile_pic: String? = null,
@@ -14,22 +17,14 @@ data class Posts(
     val post_image: String? = null,
     val retweeted: Boolean = false,
     val liked: Boolean = false,
-    val shared_name: String = ""
+    val shared_name: String = "",
 ) {
     constructor() : this(
         "", "", "", "", "",
         false, 0, 0, 0, "",
-        false, false
+        false, false,
     )
 }
-
-
-
-
-
-
-
-
 
 
 

@@ -10,16 +10,15 @@ import com.samkt.sample.R
 
 val sf_pro_regular = FontFamily(
     listOf(
-        Font(R.font.sf_pro_regular)
-    )
+        Font(R.font.sf_pro_regular),
+    ),
 )
 
 val sf_pro_light = FontFamily(
     listOf(
-        Font(R.font.sf_pro_light)
-    )
+        Font(R.font.sf_pro_light),
+    ),
 )
-
 
 // Set of Material typography styles to start with
 val Typography = Typography(
@@ -28,8 +27,8 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    )
+        letterSpacing = 0.5.sp,
+    ),
     /* Other default text styles to override
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,

@@ -1,10 +1,8 @@
 package com.samkt.sample
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -33,7 +31,7 @@ class MainActivity : ComponentActivity() {
             SampleTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.background,
                 ) {
                     TwitterCloneApp()
                 }
@@ -41,7 +39,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -51,48 +48,48 @@ fun TwitterCloneApp(
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Routes.HOME_SCREEN
+        startDestination = Routes.HOME_SCREEN,
     ) {
-       composable(Routes.HOME_SCREEN){
-           HomeScreen(navController = navController)
-       }
-       destination(Routes.POST_SCREEN){
-           PostScreen(navController = navController)
-       }
+        composable(Routes.HOME_SCREEN) {
+            HomeScreen(navController = navController)
+        }
+        destination(Routes.POST_SCREEN) {
+            PostScreen(navController = navController)
+        }
     }
 }
 
 fun NavGraphBuilder.destination(
-    route:String,
-    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
-){
+    route: String,
+    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit,
+) {
     val duration = 300
     composable(
         route = route,
         enterTransition = {
             slideIntoContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
-                animationSpec = tween(duration)
+                animationSpec = tween(duration),
             )
         },
         exitTransition = {
             slideOutOfContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
-                animationSpec = tween(duration)
+                animationSpec = tween(duration),
             )
         },
         popEnterTransition = {
             slideIntoContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
-                animationSpec = tween(duration)
+                animationSpec = tween(duration),
             )
         },
         popExitTransition = {
             slideOutOfContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
-                animationSpec = tween(duration)
+                animationSpec = tween(duration),
             )
         },
-        content = content
+        content = content,
     )
 }

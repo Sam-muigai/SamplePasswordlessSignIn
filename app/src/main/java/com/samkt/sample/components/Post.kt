@@ -46,48 +46,51 @@ import com.samkt.sample.ui.theme.sf_pro_regular
 @Composable
 fun Posts(
     modifier: Modifier = Modifier,
-    posts: Posts
+    posts: Posts,
 ) {
     val context = LocalContext.current
     Surface(modifier = modifier.fillMaxWidth()) {
         posts.run {
             Column(modifier = Modifier) {
                 if (liked || retweeted) {
-                    val (icon, message) = if (liked)
+                    val (icon, message) = if (liked) {
                         Pair(
                             R.drawable.heart_solid,
-                            " $shared_name liked"
+                            " $shared_name liked",
                         )
-                    else
+                    } else {
                         Pair(
                             R.drawable.retweet,
-                            " $shared_name retweeted"
+                            " $shared_name retweeted",
                         )
+                    }
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = 62.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Image(
                             modifier = Modifier.size(12.dp),
                             painter = painterResource(id = icon),
-                            contentDescription = null
+                            contentDescription = null,
                         )
                         Text(
                             text = message,
                             style = TextStyle(
                                 fontFamily = sf_pro_regular,
                                 color = Color(0xFF687684),
-                                fontSize = 14.sp
-                            )
+                                fontSize = 14.sp,
+                            ),
                         )
                     }
-                } else Spacer(modifier = Modifier.padding(10.dp))
+                } else {
+                    Spacer(modifier = Modifier.padding(10.dp))
+                }
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
+                        .padding(horizontal = 20.dp),
                 ) {
                     AsyncImage(
                         modifier = Modifier
@@ -99,7 +102,7 @@ fun Posts(
                             .build(),
                         contentDescription = null,
                         placeholder = painterResource(id = R.drawable.profile),
-                        contentScale = ContentScale.Crop
+                        contentScale = ContentScale.Crop,
                     )
                     Column(modifier = Modifier.weight(1f)) {
                         Row(modifier = Modifier.fillMaxWidth()) {
@@ -109,8 +112,8 @@ fun Posts(
                                         style = SpanStyle(
                                             fontFamily = sf_pro_regular,
                                             fontWeight = FontWeight.Bold,
-                                            fontSize = 16.sp
-                                        )
+                                            fontSize = 16.sp,
+                                        ),
                                     ) {
                                         append("$user_name ")
                                     }
@@ -119,13 +122,13 @@ fun Posts(
                                             fontFamily = sf_pro_regular,
                                             fontWeight = FontWeight.Light,
                                             fontSize = 14.sp,
-                                            color = Color(0xFF687684)
-                                        )
+                                            color = Color(0xFF687684),
+                                        ),
                                     ) {
                                         append("$user_label.$time_posted")
                                     }
                                 },
-                                overflow = TextOverflow.Ellipsis
+                                overflow = TextOverflow.Ellipsis,
                             )
                         }
                         Text(
@@ -135,7 +138,7 @@ fun Posts(
                                 lineHeight = 20.5.sp,
                                 fontFamily = sf_pro_light,
                                 fontWeight = FontWeight.Bold,
-                            )
+                            ),
                         )
                         Spacer(modifier = Modifier.height(10.dp))
                         post_image?.let {
@@ -149,14 +152,14 @@ fun Posts(
                                     .crossfade(true)
                                     .build(),
                                 contentDescription = null,
-                                contentScale = ContentScale.Crop
+                                contentScale = ContentScale.Crop,
                             )
                         }
                         Spacer(modifier = Modifier.height(8.dp))
                         IconSection(
                             likes = no_of_likes,
                             retweets = no_of_reposts,
-                            comments = no_of_comments
+                            comments = no_of_comments,
                         )
                     }
                 }
@@ -165,7 +168,7 @@ fun Posts(
                     Row(
                         modifier = Modifier.padding(start = 29.dp),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         AsyncImage(
                             modifier = Modifier
@@ -176,7 +179,7 @@ fun Posts(
                                 .build(),
                             contentDescription = null,
                             placeholder = painterResource(id = R.drawable.profile),
-                            contentScale = ContentScale.Crop
+                            contentScale = ContentScale.Crop,
                         )
                         Text(
                             text = "Show this thread",
@@ -185,7 +188,7 @@ fun Posts(
                                 fontFamily = sf_pro_regular,
                                 fontWeight = FontWeight(400),
                                 color = Color(0xFF4C9EEB),
-                            )
+                            ),
                         )
                     }
                 }
@@ -193,45 +196,42 @@ fun Posts(
                 Divider(thickness = 0.5.dp)
             }
         }
-
     }
 }
-
 
 @Composable
 fun IconSection(
     modifier: Modifier = Modifier,
     likes: Int,
     retweets: Int,
-    comments: Int
+    comments: Int,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .padding(end = 30.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         IconItem(
             icon = R.drawable.comment,
-            number = comments
+            number = comments,
         )
         IconItem(
             icon = R.drawable.retweet,
-            number = retweets
+            number = retweets,
         )
         IconItem(
             icon = R.drawable.heart,
-            number = likes
+            number = likes,
         )
         Icon(
             modifier = Modifier.size(15.dp),
             painter = painterResource(id = R.drawable.share),
             contentDescription = null,
-            tint = Color(0xFF687684)
+            tint = Color(0xFF687684),
         )
     }
 }
-
 
 @Composable
 fun IconItem(
@@ -244,7 +244,7 @@ fun IconItem(
             modifier = Modifier.size(15.dp),
             painter = painterResource(id = icon),
             contentDescription = null,
-            tint = Color(0xFF687684)
+            tint = Color(0xFF687684),
         )
         Spacer(modifier = Modifier.width(2.dp))
         if (number != 0) {
@@ -255,12 +255,11 @@ fun IconItem(
                     fontFamily = sf_pro_regular,
                     fontWeight = FontWeight(400),
                     color = Color(0xFF687684),
-                )
+                ),
             )
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

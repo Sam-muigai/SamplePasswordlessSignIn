@@ -27,7 +27,6 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -48,18 +47,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.samkt.sample.R
 import com.samkt.sample.ui.theme.sf_pro_light
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.samkt.sample.util.UiEvents
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -69,13 +67,13 @@ import kotlinx.coroutines.launch
 fun PostScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    viewModel: PostViewModel = viewModel()
+    viewModel: PostViewModel = viewModel(),
 
 ) {
     val context = LocalContext.current
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = viewModel::chooseImage
+        onResult = viewModel::chooseImage,
     )
     val state = viewModel.uiState.collectAsState().value
     val focusRequester = remember {
@@ -96,7 +94,7 @@ fun PostScreen(
                     is UiEvents.ShowSnackBar -> Unit
                 }
             }
-        }
+        },
     )
     Scaffold(
         modifier = modifier,
@@ -106,17 +104,17 @@ fun PostScreen(
                     .fillMaxWidth()
                     .padding(start = 20.dp, end = 20.dp, bottom = 10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 IconButton(
                     onClick = {
                         focusManager.clearFocus()
                         navController.popBackStack()
-                    }
+                    },
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.cancel),
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 }
                 Button(
@@ -126,29 +124,29 @@ fun PostScreen(
                         viewModel.createPost()
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF4C9EEB)
-                    )
+                        containerColor = Color(0xFF4C9EEB),
+                    ),
                 ) {
                     Text(text = "Post")
                 }
             }
-        }
+        },
     ) { paddingValues ->
         Box(
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .imePadding()
+                    .imePadding(),
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     AsyncImage(
                         modifier = Modifier
@@ -159,7 +157,7 @@ fun PostScreen(
                             .build(),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
-                        placeholder = painterResource(id = R.drawable.profile)
+                        placeholder = painterResource(id = R.drawable.profile),
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                 }
@@ -172,7 +170,7 @@ fun PostScreen(
                     textStyle = TextStyle(
                         fontSize = 16.sp,
                         fontFamily = sf_pro_light,
-                        fontWeight = FontWeight(400)
+                        fontWeight = FontWeight(400),
                     ),
                     decorationBox = { innerTextField ->
                         if (state.postInformation.isEmpty()) {
@@ -183,16 +181,16 @@ fun PostScreen(
                                     fontFamily = sf_pro_light,
                                     fontWeight = FontWeight(400),
                                     color = Color(0xFF687684),
-                                )
+                                ),
                             )
                         }
                         innerTextField()
-                    }
+                    },
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     state.imageUrl?.let {
                         AsyncImage(
@@ -202,7 +200,7 @@ fun PostScreen(
                                 .clip(RoundedCornerShape(8.dp)),
                             model = it,
                             contentDescription = null,
-                            contentScale = ContentScale.Crop
+                            contentScale = ContentScale.Crop,
                         )
                     }
                 }
@@ -213,21 +211,21 @@ fun PostScreen(
                         onClick = {
                             // TODO: Choose the image
                             scope.launch {
-                               focusManager.clearFocus()
+                                focusManager.clearFocus()
                                 delay(500)
                                 photoPickerLauncher.launch(
-                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
                                 )
                             }
                         },
                         colors = IconButtonDefaults.iconButtonColors(
-                            contentColor = Color(0xFF4C9EEB)
-                        )
+                            contentColor = Color(0xFF4C9EEB),
+                        ),
                     ) {
                         Icon(
                             modifier = Modifier.size(18.dp),
                             painter = painterResource(id = R.drawable.gallery),
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
                 }
@@ -235,7 +233,7 @@ fun PostScreen(
             if (state.loading) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     CircularProgressIndicator()
                 }
@@ -250,7 +248,6 @@ fun KeyboardAwareContent() {
         mutableStateOf("")
     }
 }
-
 
 @Composable
 fun isKeyBoardVisible(): Boolean {
